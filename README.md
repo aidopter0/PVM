@@ -15,31 +15,48 @@ It covers the same core workflow as SaaS tools like PlanoHero: product catalogue
 - **Store rollout**: assign planograms to stores and see each store's planogram set.
 - **Print**: a landscape execution sheet with the fixture drawing and a shelf-by-shelf pick list (SKU, position from left, facings, capacity) for store teams.
 
-## Quick start (Docker)
+## Getting started
+
+You need **Node.js 22+** ([download](https://nodejs.org/en/download)) and a **PostgreSQL 14+** database. The setup script can provide Postgres for you through Docker or a local install.
 
 ```bash
-cp .env.example .env            # change POSTGRES_PASSWORD
+npm run setup     # checks Node, creates .env, starts Postgres, creates the database, loads demo data
+npm start         # builds and runs the app at http://localhost:3000
+```
+
+`npm run setup` is safe to re-run. It works through these steps:
+
+1. **`.env`**: generated from `.env.example` with a random database password, unless the file already exists. The app reads it automatically.
+2. **Postgres**: uses the database in `DATABASE_URL` if it can already reach it. Otherwise it starts one with Docker (`docker compose up -d db`), or with a local PostgreSQL install (Debian/Ubuntu packages or Homebrew), and creates the user and database from `.env`.
+3. **Schema and data**: runs the migrations and loads demo data: 26 grocery products, 3 stores and a merchandised cereal planogram. Pass `--no-demo` to skip the demo data: `npm run setup -- --no-demo`.
+
+To use an existing Postgres server instead, copy `.env.example` to `.env`, set `DATABASE_URL`, then run `npm run setup`.
+
+## Deploying with Docker
+
+Docker is all you need on the server; you don't need Node or Postgres installed:
+
+```bash
+cp .env.example .env            # set a strong POSTGRES_PASSWORD
 docker compose up -d --build
 docker compose exec app node apps/api/dist/db/seed.js   # optional demo data
 ```
 
-Open http://localhost:8080. Database migrations run automatically when the app starts.
+Open http://localhost:8080. Migrations run automatically when the app starts. Postgres data lives in the `pgdata` volume.
 
 ## Development
 
-Requirements: Node 22+ and a PostgreSQL 14+ database.
-
 ```bash
-npm install
-cp .env.example .env            # point DATABASE_URL at your database
-export $(grep -v '^#' .env | xargs)
-npm run db:migrate
-npm run db:seed                 # demo categories, 26 grocery products, 3 stores, 1 cereal planogram
-npm run dev                     # API on :3000, web on :5173 (proxies /api)
+npm run dev                     # API on :3000 with reload, web on :5173 (proxies /api)
 ```
 
 | Command             | What it does                                       |
 | ------------------- | -------------------------------------------------- |
+| `npm run setup`     | One-time setup (see above)                         |
+| `npm start`         | Build and run the production app on :3000          |
+| `npm run db:up`     | Start only Postgres, in Docker                     |
+| `npm run db:migrate`| Apply pending SQL migrations                       |
+| `npm run db:seed`   | Load demo data into an empty database              |
 | `npm run dev`       | API (tsx watch) + Vite dev server                  |
 | `npm test`          | Unit tests (planogram geometry, validation, CSV)   |
 | `npm run typecheck` | TypeScript across all workspaces                   |
@@ -82,9 +99,10 @@ Every dimension is stored as whole millimetres. A shelf's `y` is the height of i
 
 | Variable           | Default | Notes                                              |
 | ------------------ | ------- | -------------------------------------------------- |
-| `DATABASE_URL`     | none (required) | Postgres connection string                 |
+| `DATABASE_URL`     | none (required) | Postgres connection string; set in `.env`  |
 | `API_PORT`         | `3000`  |                                                    |
-| `WEB_DIST`         | none    | Folder with the built web app to serve at `/`      |
+| `WEB_DIST`         | `apps/web/dist` | Folder with the built web app to serve at `/` |
+| `SEED_DEMO`        | `false` | `true` loads demo data into an empty database at startup |
 | `MIGRATE_ON_START` | `true`  | Set `false` to run `db:migrate` yourself           |
 | `CORS_ORIGIN`      | off     | Only needed if the web app is served from elsewhere |
 | `LOG_LEVEL`        | `info`  |                                                    |
