@@ -7,7 +7,10 @@
     "apps/*"
   ],
   "scripts": {
+    "setup": "bash scripts/setup.sh",
+    "start": "npm run build --workspace=@pvm/web && npm run build --workspace=@pvm/api && npm run start --workspace=@pvm/api",
     "dev": "npm run dev --workspace=@pvm/api & npm run dev --workspace=@pvm/web",
+    "db:up": "docker compose up -d db",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",

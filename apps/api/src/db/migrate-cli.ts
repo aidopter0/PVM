@@ -1,3 +1,4 @@
+import '../env.js';
 import { createPool } from './pool.js';
 import { migrate } from './migrate.js';
 
