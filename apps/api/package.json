@@ -1,0 +1,31 @@
+{
+  "name": "@pvm/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "node build.mjs",
+    "start": "node dist/server.js",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "db:migrate": "tsx src/db/migrate-cli.ts",
+    "db:seed": "tsx src/db/seed.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.3.0",
+    "@fastify/static": "^10.1.5",
+    "fastify": "^5.12.5",
+    "pg": "^8.23.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@pvm/shared": "*",
+    "@types/node": "^22.19.0",
+    "@types/pg": "^8.23.1",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.2"
+  }
+}

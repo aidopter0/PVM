@@ -1,0 +1,5 @@
+sku,gtin,name,brand,category,width,height,depth,price,color
+PST-001,5000000000011,Spaghetti 500g,Bella Pasta,Pasta & Rice,75,260,40,1.19,#e6b85c
+PST-002,5000000000028,Penne 500g,Bella Pasta,Pasta & Rice,130,200,65,1.19,#e6b85c
+PST-003,5000000000035,Basmati Rice 1kg,Golden Field,Pasta & Rice,140,220,60,2.49,#c9a227
+PST-004,5000000000042,"Tomato & Basil Sauce, 500g",Bella Pasta,Pasta & Rice,80,140,80,1.79,#c0392b

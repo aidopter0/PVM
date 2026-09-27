@@ -1,0 +1,20 @@
+{
+  "name": "pvm",
+  "private": true,
+  "description": "Plano-Visual-Merch: self-hosted planogram and visual merchandising tool for grocery retail",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@pvm/api & npm run dev --workspace=@pvm/web",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "db:migrate": "npm run db:migrate --workspace=@pvm/api",
+    "db:seed": "npm run db:seed --workspace=@pvm/api"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
